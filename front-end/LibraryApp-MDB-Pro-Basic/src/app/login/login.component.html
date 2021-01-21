@@ -1,0 +1,67 @@
+<div class="main-container">
+  <div class="login-form">
+    <div class="logo">
+      <form #f="ngForm"
+            (ngSubmit)="f.form.valid && onSubmit()"
+            *ngIf="!isLoggedIn"
+            name="form"
+            novalidate>
+
+        <span class="h4 mb-4">Sign in</span>
+
+        <!--Body-->
+        <div class="md-form mb-5">
+          <input [(ngModel)]="form.email" [formControl]="modalFormElegantEmail" class="form-control"
+                 id="Form-email1"
+                 mdbInput
+                 mdbValidate
+                 name="email"
+                 type="email">
+          <label for="Form-email1">Your email</label>
+          <mdb-error
+            *ngIf="modalFormElegantEmail.invalid && (modalFormElegantEmail.dirty || modalFormElegantEmail.touched)">
+            Incorrect email format !
+          </mdb-error>
+          <mdb-success
+            *ngIf="modalFormElegantEmail.valid && (modalFormElegantEmail.dirty || modalFormElegantEmail.touched)">Input
+            valid
+          </mdb-success>
+        </div>
+        <div class="md-form pb-3">
+          <input [(ngModel)]="form.password" [formControl]="modalFormElegantPassword" class="form-control"
+                 id="Form-pass1"
+                 mdbInput
+                 mdbValidate
+                 minlength="6"
+                 name="password"
+                 type="password">
+          <label for="Form-pass1">Your password</label>
+          <mdb-error
+            *ngIf="modalFormElegantPassword.invalid && (modalFormElegantPassword.dirty || modalFormElegantPassword.touched)">
+            Minimum length must be 6 characters !
+          </mdb-error>
+
+          <mdb-success
+            *ngIf="modalFormElegantPassword.valid && (modalFormElegantPassword.dirty || modalFormElegantPassword.touched)">
+            Input valid
+          </mdb-success>
+        </div>
+        <div class="text-center mb-3">
+          <button class="btn btn-info btn-block my-4"
+                  type="submit">Sign in
+          </button>
+        </div>
+
+        <div *ngIf="f.submitted && isLoginFailed"
+             class="alert alert-danger"
+             role="alert">
+          Login failed: {{ errorMessage }}
+        </div>
+
+        <p class="font-small grey-text d-flex justify-content-end">Not a member?
+          <a class="blue-text ml-1" [routerLink]="['/register']"> Sign Up</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

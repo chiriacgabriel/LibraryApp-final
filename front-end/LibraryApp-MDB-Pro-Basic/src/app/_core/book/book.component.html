@@ -1,0 +1,324 @@
+<!-- Navbar Authors-->
+<mdb-navbar
+  SideClass="navbar fixed-top-author navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav grey lighten-5 navbar-dark"
+  [containerInside]="false">
+  <navlinks class="navbar-container">
+    <mdb-icon class="fas-author" fas icon="address-book"></mdb-icon>
+  </navlinks>
+  <navlinks class="navbar-container">
+    <span class="clearfix d-none d-sm-inline-block span-book">Books</span>
+  </navlinks>
+  <navlinks>
+    <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav">
+      <li class="nav-item">
+        <button (click)="bookFrame.toggle()" color="primary" mdbBtn mdbWavesEffect
+                rounded="true"
+                size="md" type="button">Add Book
+        </button>
+      </li>
+    </ul>
+  </navlinks>
+</mdb-navbar>
+<!-- End navbar -->
+
+
+<!-- Modal Add new Book -->
+<div #bookFrame="mdbModal" aria-hidden="false" aria-labelledby="myModalLabel"
+     class="modal fade top"
+     id="bookFrame"
+     mdbModal
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog-scrollable" role="document">
+    <!--Content-->
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header text-center custom-header-modal">
+
+        <img src="./assets/images/addBook.png" class="mx-auto">
+
+        <button (click)="bookFrame.hide()" aria-label="Close" class="close"
+                data-dismiss="modal"
+                type="button">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+      </div>
+      <!--Body-->
+      <div class="modal-body">
+
+        <form #addBookValidate = "ngForm"
+              (ngSubmit)="addBookValidate.submitted && addBook(bookFrame)"
+              [formGroup]="addBookForm">
+          <div class="row">
+            <div class="col-4">
+              <div class="form-group">
+                <mdb-icon fas icon="pen-alt" class="prefix grey-text"></mdb-icon>
+                <label class="col-sm-6 col-form-label" for="title">Title</label>
+                <input [(ngModel)]="preSelectedTitle" class="form-control" disabled
+                       formControlName="title"
+                       id="title" type="text">
+
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="form-group">
+                <mdb-icon fas icon="user-alt" class="prefix grey-text"></mdb-icon>
+                <label class="col-sm-6 col-form-label" for="author">Author</label>
+                <select class="form-control" formControlName="author" id="author">
+                  <option disabled hidden selected value="">Select author...</option>
+                  <option *ngFor="let author of authors" [ngValue]="author">
+                    {{author.firstName}} {{author.lastName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="form-group">
+                <mdb-icon fas icon="check" class="prefix grey-text"></mdb-icon>
+                <label class="col-sm-6 col-form-label" for="stock">Stock</label>
+                <input class="form-control" formControlName="stock" id="stock" min=0
+                       oninput="validity.valid||(value='')" type="number">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4">
+              <div class="form-group">
+                <mdb-icon fas icon="file-image" class="prefix grey-text"></mdb-icon>
+                <label class="col-sm-6 col-form-label" for="bookImageUrl">Book Image</label>
+                <select class="form-control" formControlName="bookImageUrl" id="bookImageUrl" (ngModelChange)="getPreSelectedTitle($event)">
+                  <option disabled selected value="">Select image...</option>
+                  <option *ngFor="let bookImage of bookImages"
+                          [ngValue]="bookImage">
+                    {{bookImage.title}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="form-group">
+                <mdb-icon fas icon="caret-square-right" class="prefix grey-text"></mdb-icon>
+                <label class="col-sm-6 col-form-label" for="bookCategory">Category</label>
+                <select class="form-control" formControlName="bookCategory" id="bookCategory" (ngModelChange)="isFictionalSelected($event)">
+                  <option disabled hidden selected value="">Select Category...</option>
+                  <option *ngFor="let category of bookCategories"
+                          [ngValue]="category">
+                    {{category.nameOfBookCategory}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="form-group">
+
+                <div *ngIf="isFictional">
+                  <mdb-icon fas icon="clipboard-list" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="fictional">Type</label>
+                  <select class="form-control" formControlName="fictional" id="fictional">
+                    <option disabled hidden selected value="">Select Type...</option>
+                    <option *ngFor="let fictional of fictionals" [ngValue]="fictional">
+                      {{fictional.nameOfFictional}}
+                    </option>
+                  </select>
+                </div>
+
+                <div *ngIf="isNonfictional">
+                  <mdb-icon fas icon="clipboard-list" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="fictional">Type</label>
+                  <select class="form-control" formControlName="nonfictional" id="nonfictional">
+                    <option disabled hidden selected value="">Select Type...</option>
+                    <option *ngFor="let nonfictional of nonfictionals" [ngValue]="nonfictional">
+                      {{nonfictional.nameOfNonfictional}}
+                    </option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="addBookValidate.submitted && isErrorSelected" class="alert alert-warning">
+            {{errorMessage}}
+          </div>
+
+          <div class="justify-content-center" style="display: flex">
+            <button mdbBtn mdbWavesEffect style="background: brown; color: white"
+                    rounded="true" type="submit">Add
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
+
+<!-- Modal Edit Book -->
+<div #editBookFrame="mdbModal" aria-hidden="false" aria-labelledby="myModalLabel"
+     class="modal fade top"
+     id="editBookFrame"
+     mdbModal
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog-scrollable" role="document">
+    <!--Content-->
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header text-center custom-header-modal">
+
+        <img src="./assets/images/edit-book.png" class="mx-auto">
+
+        <button (click)="editBookFrame.hide()" aria-label="Close" class="close"
+                data-dismiss="modal"
+                type="button">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+      </div>
+      <!--Body-->
+      <div class="modal-body">
+        <ng-container *ngIf="editBookForm">
+          <form (ngSubmit)="updateBook(editBookFrame)" [formGroup]="editBookForm">
+            <div class="row">
+              <div class="col-4">
+                <div class="form-group">
+                  <mdb-icon fas icon="pen-alt" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="editTitle">Title</label>
+                  <input class="form-control" formControlName="title"
+                         id="editTitle" type="text">
+
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <mdb-icon fas icon="user-alt" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="editAuthor">Author</label>
+                  <select class="form-control" formControlName="author" id="editAuthor">
+                    <option *ngFor="let author of authors" [ngValue]="author">
+                      {{author.firstName}} {{author.lastName}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <mdb-icon fas icon="check" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="editStock">Stock</label>
+                  <input class="form-control" formControlName="stock" id="editStock"
+                         oninput="validity.valid||(value='')" type="number">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4">
+                <div class="form-group">
+                  <mdb-icon fas icon="file-image" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="editBookImageUrl">Book Image</label>
+                  <select class="form-control" formControlName="bookImageUrl" id="editBookImageUrl">
+                    <option *ngFor="let bookImage of bookImages" [ngValue]="bookImage">
+                      {{bookImage.title}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <mdb-icon fas icon="caret-square-right" class="prefix grey-text"></mdb-icon>
+                  <label class="col-sm-6 col-form-label" for="editBookCategory">Category</label>
+                  <select class="form-control" formControlName="bookCategory" id="editBookCategory">
+                    <option disabled hidden selected value="">Select Category</option>
+                    <option (click)="isFictionalSelected(category)"
+                            *ngFor="let category of bookCategories"
+                            [ngValue]="category">
+                      {{category.nameOfBookCategory}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <div *ngIf="isFictional">
+                    <mdb-icon fas icon="clipboard-list" class="prefix grey-text"></mdb-icon>
+                    <label class="col-sm-6 col-form-label" for="editFictional">Type</label>
+                    <select class="form-control" formControlName="fictional" id="editFictional">
+                      <option disabled hidden selected value="">Select Type</option>
+                      <option *ngFor="let fictional of fictionals" [ngValue]="fictional">
+                        {{fictional.nameOfFictional}}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div *ngIf="isNonfictional">
+                    <mdb-icon fas icon="clipboard-list" class="prefix grey-text"></mdb-icon>
+                    <label class="col-sm-6 col-form-label" for="editNonfictional">Type</label>
+                    <select class="form-control" formControlName="nonfictional"
+                            id="editNonfictional">
+                      <option disabled hidden selected value="">Select Type</option>
+                      <option *ngFor="let nonfictional of nonfictionals" [ngValue]="nonfictional">
+                        {{nonfictional.nameOfNonfictional}}
+                      </option>
+                    </select>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="justify-content-center" style="display: flex">
+              <button mdbBtn mdbWavesEffect style="background: brown; color: white"
+                      rounded="true" type="submit">Update
+              </button>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
+
+
+<!--Content-->
+
+<div class="row my-5">
+  <div *ngFor="let book of books" class="col-md-3 col-md-6">
+    <div class="card mb-4">
+      <div class="view">
+        <img alt="Card image cap" class="card-img-top" [src]="book.bookImageUrl.imageUrl">
+      </div>
+      <!-- card Body -->
+      <div class="card-body p-3">
+        <h5 class="card-title font-weight-bold fuchsia-rose-text mb-0"
+            style="font-size: 15px">{{book.author.firstName}} {{book.author.lastName}}</h5>
+        <h5 class="card-title font-weight-bold fuchsia-rose-text mb-0" style="font-size: 15px">{{book.title}}</h5>
+        <p *ngIf="book.fictional != null" class="aqua-sky-text mb-0">{{book.bookCategory.nameOfBookCategory}} : {{book.fictional.nameOfFictional}}</p>
+        <p *ngIf="book.nonfictional != null" class="aqua-sky-text mb-0">{{book.bookCategory.nameOfBookCategory}} : {{book.nonfictional.nameOfNonfictional}}</p>
+        <p class="font-weight-bold mb-0" style="font-size: 20px"><img class="card-img-top" src="./assets/images/in-stock.png" alt="Card image cap" style="width: 35px; height: 30px">{{book.stock}}</p>
+      </div>
+      <!-- End Body-->
+
+      <!-- Card footer -->
+      <div class="rounded-bottom mdb-color lighten-3 text-center pt-3">
+        <ul class="list-unstyled list-inline font-small">
+          <li class="list-inline-item pr-2 white-text"><i class="far fa-clock pr-1"></i>{{book.processedDate | date: 'mediumDate'}}</li>
+
+        <button (click)="editFormBook(book,editBookFrame)"
+                class="button-newCard" style="color: #ffbb33;"><i
+          class="fas fa-user-edit"></i></button>
+        <button (click)="deleteBook(book)" class="button-newCard"
+                style="color: #ff4444;"><i class="far fa-trash-alt"></i></button>
+        </ul>
+      </div>
+      <!-- End footer -->
+    </div>
+  </div>
+</div>
+
+<!--End Content-->

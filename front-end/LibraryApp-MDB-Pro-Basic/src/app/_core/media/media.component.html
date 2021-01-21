@@ -1,0 +1,184 @@
+<form class="form-inline d-flex justify-content-center md-form form-sm">
+  <button (click)="frameAuthor.toggle()" color="default" mdbBtn mdbWavesEffect rounded="true"
+          style="margin-bottom: 10px" type="button">Add Author Image
+  </button>
+  <button (click)="frameBook.toggle()" color="default" mdbBtn mdbWavesEffect rounded="true"
+          type="button">Book
+    Image
+  </button>
+  <input aria-label="Search" class="form-control form-control-sm mr-3 w-75" placeholder="Search Image"
+         type="text">
+  <i aria-hidden="true" class="fas fa-search"></i>
+</form>
+
+<!--MODALS FOR Media Author-->
+
+<div #frameAuthor="mdbModal" aria-hidden="true" aria-labelledby="myModalLabel"
+     class="modal fade top" id="frameModalAuthor"
+     mdbModal
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
+    <!--Content-->
+    <div class="modal-content">
+      <!--Body-->
+      <ng-container *ngIf="authorImageForm">
+        <form #titleAuthor="ngForm"
+              (ngSubmit)="titleAuthor.form.valid && addAuthorImage(frameAuthor)"
+              [formGroup]="authorImageForm">
+          <div class="modal-body mb-1">
+
+            <div class="md-form ml-0 mr-0">
+              <input class="form-control form-control-sm ml-0" formControlName="title"
+                     id="titleAuthor"
+                     mdbInput mdbValidate type="text">
+              <label class="ml-0" for="titleAuthor">Image title</label>
+              <mdb-error *ngIf="titleAuthor.invalid && (titleAuthor.dirty || titleAuthor.touched)">
+                Title is already taken
+              </mdb-error>
+
+            </div>
+
+            <div class="md-form ml-0 mr-0">
+              <input type="file"
+                     accept="image/*" (change)="uploadImage($event)"
+                     mdbInput mdbValidate>
+
+            </div>
+
+            <div *ngIf="titleAuthor.submitted && isAuthorTitlePresent" class="alert alert-warning">
+              {{errorMessageAuthor}}
+            </div>
+
+            <div class="text-center mt-4">
+              <button class="my-0" color="default" mdbBtn
+                      rounded="true" size="sm"
+                      type="submit">Confirm
+              </button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--END MODAL-->
+
+<!--MODALS FOR Book Media-->
+<div #frameBook="mdbModal" aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade top"
+     id="frameModalBook"
+     mdbModal
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
+    <!--Content-->
+    <div class="modal-content">
+      <!--Body-->
+      <ng-container *ngIf="bookImageForm">
+        <form #titleBook="ngForm"
+              (ngSubmit)="titleBook.form.valid && addBookImage(frameBook)"
+              [formGroup]="bookImageForm">
+          <div class="modal-body mb-1">
+
+            <div class="md-form ml-0 mr-0">
+              <input class="form-control form-control-sm ml-0" formControlName="title"
+                     id="titleBook" mdbInput mdbValidate type="text">
+              <label class="ml-0" for="titleBook">Image title</label>
+              <mdb-error *ngIf="titleBook.invalid && (titleBook.dirty || titleBook.touched)">
+                Title is already taken
+              </mdb-error>
+            </div>
+
+            <div class="md-form ml-0 mr-0">
+              <input type="file"
+                     accept="image/*" (change)="uploadImage($event)"
+                     mdbInput mdbValidate>
+
+            </div>
+
+            <div *ngIf="titleBook.submitted && isBookTitlePresent" class="alert alert-warning">
+              {{errorMessageBook}}
+            </div>
+
+            <div class="text-center mt-4">
+              <button class="my-0" color="default" mdbBtn
+                      rounded="true" size="sm"
+                      type="submit">Confirm
+              </button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--END MODAL-->
+
+<div class=row>
+  <div class="col">
+
+    <!--Content Author-->
+    <h3 class="card-header info-color white-text text-uppercase text-center">Media Authors</h3>
+    <div class="row">
+      <div *ngFor="let author of authorImages" class="col-md-4 mx-auto my-2">
+
+        <!--Card-->
+        <mdb-card class="text-center height-card">
+          <button (click)="deleteAuthorImageById(author)" class="float-right" size="sm">
+            <i class="far fa-trash-alt text-danger"></i>
+          </button>
+          <!--Card image-->
+          <div class="view view-cascade overlay waves-light" mdbWavesEffect>
+            <mdb-card-img [src]="author.imageUrl"></mdb-card-img>
+            <a>
+              <div class="mask rgba-white-slight"></div>
+            </a>
+          </div>
+          <!--/Card image-->
+          <mdb-card-body>
+            <h4 class="card-title">
+              <strong>{{author.title}}</strong>
+            </h4>
+          </mdb-card-body>
+
+        </mdb-card>
+        <!--/.Card-->
+      </div>
+    </div>
+    <!-- END -->
+
+  </div>
+  <div class="col">
+
+    <!--Content Book-->
+    <h3 class="card-header info-color white-text text-uppercase text-center">Media Books</h3>
+    <div class="row">
+      <div *ngFor="let book of bookImages" class="col-md-4 mx-auto my-2">
+
+        <!--Card-->
+        <mdb-card class="text-center height-card">
+          <button (click)="deleteBookImageById(book)" class="float-right" size="sm">
+            <i class="far fa-trash-alt text-danger"></i>
+          </button>
+          <!--Card image-->
+          <div class="view view-cascade overlay waves-light" mdbWavesEffect>
+            <mdb-card-img [src]="book.imageUrl"></mdb-card-img>
+            <a>
+              <div class="mask rgba-white-slight"></div>
+            </a>
+          </div>
+          <!--/Card image-->
+          <mdb-card-body>
+            <h4 class="card-title">
+              <strong>{{book.title}}</strong>
+            </h4>
+          </mdb-card-body>
+
+        </mdb-card>
+        <!--/.Card-->
+      </div>
+    </div>
+    <!-- END -->
+
+  </div>
+</div>

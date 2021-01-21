@@ -1,0 +1,385 @@
+<!-- Navbar Reservation-->
+<mdb-navbar
+  SideClass="navbar fixed-top-author navbar-toggleable-md
+  navbar-expand-lg scrolling-navbar
+  double-nav grey lighten-5 navbar-dark"
+  [containerInside]="false">
+  <navlinks class="navbar-container">
+    <mdb-icon class="fas-author" fas icon="calendar-alt"></mdb-icon>
+  </navlinks>
+  <navlinks class="navbar-container">
+    <span class="clearfix d-none d-sm-inline-block span-reservation">Reservations</span>
+  </navlinks>
+  <navlinks>
+    <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav">
+      <li class="nav-item">
+        <span class="table-add float-right mr-2">
+        <a (click)="showReservationFrame(reservationFrame)" class="text-success">
+          <mdb-icon fas icon="plus" size="2x"></mdb-icon>
+        </a>
+      </span>
+      </li>
+    </ul>
+  </navlinks>
+</mdb-navbar>
+<!-- End Navbar -->
+
+<!--TABLE HOLDING THE INFORMATION-->
+<div class="container-fluid my-5">
+  <table class="add-reservation table-hover z-depth-1-half">
+    <thead class="add-reservation-thead">
+    <tr class="text-center">
+      <th rowspan="2" scope="col">Start Date</th>
+      <th rowspan="2" scope="col">End Date</th>
+      <th colspan="2" scope="col">Employee</th>
+      <th rowspan="2" scope="col">State</th>
+      <th colspan="3" scope="col">Client</th>
+      <th rowspan="2" scope="col">Book</th>
+      <th rowspan="2" scope="col">Processed Date</th>
+      <th rowspan="2" scope="col">Action</th>
+    </tr>
+    <tr class="text-center">
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Phone number</th>
+    </tr>
+
+    </thead>
+    <tbody *ngFor="let reservation of reservationList">
+    <tr>
+      <td>
+        {{reservation.startDate}}
+      </td>
+      <td>
+        {{reservation.endDate}}
+      </td>
+      <td>
+        {{reservation.user.name}}
+      </td>
+      <td>
+        {{reservation.user.lastName}}
+      </td>
+      <td>
+        {{reservation.reservationState.nameOfState}}
+      </td>
+      <td>
+        {{reservation.client.firstName}}
+      </td>
+      <td>
+        {{reservation.client.lastName}}
+      </td>
+      <td>
+        {{reservation.client.phoneNumber}}
+      </td>
+      <td>
+        <ul *ngFor="let book of reservation.bookList">
+          <li>
+            {{book.title}}
+          </li>
+        </ul>
+
+      </td>
+      <td>
+        {{reservation.processedDate | date: 'medium'}}
+      </td>
+      <td>
+        <a (click)="editFormReservation(reservation, editReservationFrame)" style="color: #ffbb33;">
+          <mdb-icon fas icon="calendar-check" size="lg"></mdb-icon>
+          Edit</a>
+      </td>
+
+    </tr>
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
+</div>
+
+<!--END TABLE-->
+
+<!--MODAL TO ADD RESERVATION-->
+<div #reservationFrame="mdbModal" aria-hidden="true" aria-labelledby="myBasicModalLabel" class="modal fade right" mdbModal
+     role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button (click)="reservationFrame.hide()" aria-label="Close" class="close pull-right"
+                type="button">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Reservation</h4>
+      </div>
+      <div class="modal-body">
+        <ng-container *ngIf="reservationForm">
+          <form (ngSubmit)="addReservation(reservationFrame)" [formGroup]="reservationForm">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>Start Date:</th>
+                <th>End Date:</th>
+                <th>Employee</th>
+                <th>State</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  <input class="form-control" formControlName="startDate" type="date">
+                </td>
+                <td>
+                  <input class="form-control" formControlName="endDate" type="date">
+                </td>
+                <td>{{currentUser.email}}</td>
+                <td>
+                  <mdb-select-2 formControlName="reservationState">
+                    <mdb-select-option *ngFor="let state of reservationStateList" [value]="state">
+                      {{state.nameOfState}}
+                    </mdb-select-option>
+                  </mdb-select-2>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="md-form">
+                  <mdb-card-text>
+                    Client:
+                  </mdb-card-text>
+                </div>
+              </div>
+              <div class="col-sm-7">
+                <div class="md-form">
+                  <mdb-select-2 formControlName="client" placeholder="Select Client">
+                    <mdb-select-filter (ngModelChange)="searchClient.next($event)"
+                                       [ngModel]="searchClient | async"
+                                       formControlName="client">
+                    </mdb-select-filter>
+                    <mdb-select-option *ngFor="let client of filteredOptionsClient | async"
+                                       [value]="client">
+                      {{client.firstName}} {{client.lastName}}
+                    </mdb-select-option>
+                  </mdb-select-2>
+                </div>
+              </div>
+              <div class="col-md-3 mr-auto">
+                <div class="md-form">
+                  <button color="default" mdbBtn mdbWavesEffect size="md" type="button">Add Client
+                    <mdb-icon class="ml-1" fas icon="plus"></mdb-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <ng-container *ngIf="bookForm">
+              <form [formGroup]="bookForm">
+                <div class="row">
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <th>Book</th>
+                      <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <td>
+                      <button (click)="onAddRow()" *ngIf="bookForm.get('bookTableRows')" color="default"
+                              mdbBtn
+                              mdbWavesEffect size="md" type="button">Add Book
+                        <mdb-icon class="ml-1" fas icon="plus"></mdb-icon>
+                      </button>
+                    </td>
+                    <tr *ngFor="let row of bookTableRows.controls; let index = index;"
+                        formArrayName="bookTableRows">
+                      <td class="col-md-6">
+                        <mdb-select-2 [formControl]="row.get('bookList')" placeholder="Select book">
+                          <!--                    <mdb-select-filter></mdb-select-filter>-->
+                          <mdb-select-option *ngFor="let book of bookList "
+                                             [value]="book">{{book.title}}</mdb-select-option>
+                        </mdb-select-2>
+                      </td>
+                      <td class="col-md-6">
+                        <button (click)="onRemoveRow(index)" color="danger" mdbBtn mdbWavesEffect size="sm"
+                                type="button">
+                          <i class="far fa-trash-alt fa-lg"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+            </ng-container>
+            <div class="modal-footer text-left">
+              <button class="relative waves-light" color="primary" mdbBtn mdbWavesEffect
+                      type="submit">Save
+                <i class="far fa-save fa-lg ml-1"></i>
+              </button>
+              <button (click)="reservationFrame.hide()" aria-label="Close" class="relative waves-light" color="light"
+                      mdbBtn
+                      mdbWavesEffect type="button">Cancel
+                <i class="fas fa-times fa-lg ml-1"></i></button>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--END MODAL-->
+
+<!--MODAL TO EDIT RESERVATION-->
+<div #editReservationFrame="mdbModal" aria-hidden="true" aria-labelledby="myBasicModalLabel" class="modal fade right" mdbModal
+     role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button (click)="editReservationFrame.hide()" aria-label="Close" class="close pull-right"
+                type="button">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100">Reservation</h4>
+      </div>
+      <div class="modal-body">
+        <ng-container *ngIf="editReservationForm">
+          <form [formGroup]="editReservationForm" (ngSubmit)="updateReservation(editReservationFrame)">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>Start Date:</th>
+                <th>End Date:</th>
+                <th>Employee</th>
+                <th>State</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  <input class="form-control" formControlName="startDate" type="date" disabled="isCanceled? isCanceled : isFinalised">
+                </td>
+                <td>
+                  <input class="form-control" formControlName="endDate" type="date" disabled="isCanceled? isCanceled : isFinalised">
+                </td>
+                <td>{{currentUser.email}}</td>
+                <td>
+                  <mdb-select-2 formControlName="reservationState">
+                    <mdb-select-option *ngFor="let state of reservationStateList" [value]="state" [disabled]="isStateDisabled(state)">
+                      {{state.nameOfState}}
+                    </mdb-select-option>
+                  </mdb-select-2>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="md-form">
+                  <mdb-card-text>
+                    Client:
+                  </mdb-card-text>
+                </div>
+              </div>
+              <div class="col-sm-7">
+                <div class="md-form">
+                  <mdb-select-2 formControlName="client" placeholder="Select Client">
+<!--                                        <mdb-select-filter [ngModel]="searchClient | async" (ngModelChange)="searchClient.next($event)"-->
+<!--                                                           formControlName="client">-->
+<!--                                        </mdb-select-filter>-->
+                    <mdb-select-option *ngFor="let client of filteredOptionsClient | async" [disabled]="isClientDisabled(client)"
+                                       [value]="client">
+                      {{client.firstName}} {{client.lastName}}
+                    </mdb-select-option>
+                  </mdb-select-2>
+                </div>
+              </div>
+              <div class="col-md-3 mr-auto">
+                <div class="md-form">
+                  <button *ngIf="isCanceled? isCanceled : isFinalised"
+                    color="default" mdbBtn mdbWavesEffect size="md" type="button">Add Client
+                    <mdb-icon class="ml-1" fas icon="plus"></mdb-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <ng-container *ngIf="bookForm">
+              <form [formGroup]="bookForm">
+                <div class="row">
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <th>Book</th>
+                      <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <td>
+                        <button (click)="onAddRow()" *ngIf="isCanceled? isCanceled : isFinalised"
+                                color="default"
+                                mdbBtn
+                                mdbWavesEffect size="md" type="button">Add Book
+                          <mdb-icon class="ml-1" fas icon="plus"></mdb-icon>
+                        </button>
+                      </td>
+
+                      <tr formArrayName="bookTableRows" *ngFor="let row of bookTableRows.controls;
+                      let index = index;">
+                        <td class="col-md-6" [formGroupName]="index">
+                          <mdb-select-2 formControlName="bookList" placeholder="Select Book">
+                            <mdb-select-option *ngFor="let book of bookList " [disabled]="isBookDisabled(book)"
+                                    [value]="book">{{book.title}}</mdb-select-option>
+                          </mdb-select-2>
+                        </td>
+                        <td class="col-md-6">
+                          <button (click)="onRemoveRow(index)" *ngIf="isCanceled? isCanceled : isFinalised"
+                                  color="danger" mdbBtn mdbWavesEffect size="sm"
+                                  type="button"><i class="far fa-trash-alt fa-lg"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+            </ng-container>
+            <div class="cancel-reservation">
+              <button (click)="cancelReservation()" *ngIf="isCanceled"
+                      class="waves-light"
+                      style="background:
+              brown; color:
+              white" mdbBtn mdbWavesEffect
+                      type="submit">Cancel Reservation
+                <i class="fas fa-ban fa-lg ml-1"></i>
+              </button>
+              <button (click)="finaliseReservation()" *ngIf="isFinalised" class="waves-light"
+                      style="background:
+              darkgreen; color:
+              white" mdbBtn mdbWavesEffect
+                      type="submit">Finalise Reservation
+                <i class="fas fa-check fa-lg ml-1"></i>
+              </button>
+            </div>
+            <div class="save-reservation">
+              <button *ngIf="isCanceled? isCanceled : isFinalised"  class="relative waves-light"
+                      color="primary"
+                      mdbBtn
+                      mdbWavesEffect
+                      type="submit">Save
+                <i class="far fa-save fa-lg ml-1"></i>
+              </button>
+              <button (click)="editReservationFrame.hide()" aria-label="Close" class="relative waves-light" color="light"
+                      mdbBtn
+                      mdbWavesEffect type="button">Close
+                <i class="fas fa-times fa-lg ml-1"></i></button>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--END MODAL-->

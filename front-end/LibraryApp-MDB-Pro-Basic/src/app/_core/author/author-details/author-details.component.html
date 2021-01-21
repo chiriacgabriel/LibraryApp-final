@@ -1,0 +1,98 @@
+<!-- Navbar Authors-->
+<mdb-navbar
+  SideClass="navbar fixed-top-author navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav grey lighten-5 navbar-dark"
+  [containerInside]="false">
+  <navlinks class="navbar-container">
+    <mdb-icon class="fas-author" fas icon="address-book"></mdb-icon>
+  </navlinks>
+  <navlinks class="navbar-container">
+    <span class="clearfix d-none d-sm-inline-block span-author">Authors</span>
+  </navlinks>
+  <navlinks>
+    <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav">
+      <li class="nav-item">
+        <a mdbBtn type="button" floating="true" size="sm" color="default"
+           class="waves-light" mdbWavesEffect
+           [routerLink]="['/dashboard/author']">
+          <mdb-icon fas icon="arrow-left"></mdb-icon>
+        </a>
+      </li>
+    </ul>
+  </navlinks>
+
+
+</mdb-navbar>
+
+<!-- End navbar -->
+
+<!--Content Author Info-->
+<section class="magazine-section my-5">
+
+  <!-- Section heading -->
+  <h2 class="h1-responsive font-weight-bold text-center">{{author.firstName}} {{author.lastName}}</h2>
+  <!-- Section description -->
+  <h4 class="text-center dark-grey-text w-responsive mx-auto">{{author.dateOfBirth}}</h4>
+
+  <!-- Grid row -->
+  <div class="row">
+
+    <!-- Grid column -->
+    <div class="col-lg-6 col-md-12">
+
+      <!-- Featured news -->
+      <div class="single-news mb-lg-0 mb-4">
+
+        <!-- Image -->
+        <div class="view overlay rounded z-depth-1-half mb-4">
+          <img class="img-fluid" [src]="author.authorImageUrl.imageUrl">
+          <a>
+            <div class="mask rgba-white-slight waves-light" mdbWavesEffect></div>
+          </a>
+        </div>
+
+        <!-- Data -->
+        <div class="news-data d-flex justify-content-between">
+
+            <h5 class="font-weight-bold">
+              <mdb-icon fas icon="user-edit" class="pr-2"></mdb-icon>{{author.type}}</h5>
+
+          <p class="font-weight-bold dark-grey-text">
+            <mdb-icon far icon="flag" class="pr-2"></mdb-icon>{{author.nationality}}</p>
+        </div>
+
+        <!-- Excerpt -->
+        <p class="dark-grey-text mb-lg-0 mb-md-5 mb-4"
+           style="text-align: justify; text-justify: inter-word">{{author.description}}</p>
+
+      </div>
+      <!-- Featured news -->
+
+    </div>
+    <!-- Grid column -->
+
+    <!-- Grid column -->
+    <div class="col-lg-6">
+      <div class="single-news mb-4">
+        <div class="row">
+          <div class="col-md-5" *ngFor="let book of author.bookSet">
+
+            <!--Book ImageUrl-->
+            <div class="view overlay rounded z-depth-1 mb-4" style="width: 250px; height: 350px">
+              <img class="img-fluid" [src]="book.bookImageUrl.imageUrl" alt="Sample image">
+              <a>
+                <div class="mask rgba-white-slight waves-light" mdbWavesEffect></div>
+              </a>
+            </div>
+            <!--END Book ImageUrl-->
+
+            <p class="font-weight-bold dark-grey-text">{{book.title}}</p>
+            <p class="dark-grey-text">Stock: {{book.stock}}</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Grid Column -->
+  </div>
+</section>
+<!--END Content Author Info-->

@@ -1,0 +1,26 @@
+package com.library.repository;
+
+import com.library.model.Reservation;
+import com.library.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ReservationRepository extends JpaRepository<Reservation,
+        Integer> {
+
+    Page<Reservation> findAllByUser(User user, Pageable pageable);
+    List<Reservation> findAllByUser(User user);
+    Integer countByIdIsNotNull();
+
+//    @Modifying
+//    @Query("UPDATE reservation_book r set r.bookName =:bookName where r.id =:id")
+//    String bookName(@Param("name") String bookName, @Param("id") int id);
+}

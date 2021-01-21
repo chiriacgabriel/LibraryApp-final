@@ -1,0 +1,149 @@
+@import "src/app/_core/book/book.component";
+.span-author {
+  margin-left: 10px;
+  font-family: 'Font Awesome 5 Pro', 'Font Awesome 5 Free';
+  font-size: 25px;
+
+}
+
+.modal-dialog {
+  max-width: 800px;
+}
+
+mdb-card {
+  margin-top: 50px;
+}
+
+
+.col-md-3 {
+  flex: 0 0 24%;
+  max-width: 20%;
+}
+
+
+
+
+.col-md-2-custom {
+  flex: 0 0 24.6666666667%;
+  max-width: 24.6666666667%;
+}
+
+h2 {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.custom-header-modal {
+  background: gainsboro;
+}
+
+.row {
+  justify-content: center;
+  display: flex;
+}
+
+@media only screen and (max-width: 700px)  {
+
+  .modal-dialog-scrollable {
+    max-width: 85%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+}
+
+@media only screen and (min-width: 701px){
+  .modal-dialog-scrollable {
+    max-width: 800px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// End Design For Card Authors
+
+
+//**************************************Media Only Screen**************************************************//
+
+
+/* ----------- 768px - 950px ----------- */
+@media screen and (min-width: 768px) and (max-width: 950px) {
+  .view {
+    max-height: 350px;
+  }
+  .col-md-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+
+
+  }
+}
+
+@media only screen and (min-width: 701px) {
+  .modal-dialog-scrollable {
+    max-width: 800px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+
+  .modal-dialog-scrollable {
+    max-width: 85%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 90%;
+
+  }
+  .col-md-3 {
+    flex: 0 0 100%;
+    max-width: 90%;
+  }
+
+}
+
+/* ----------- 1200px - 1800px ----------- */
+@media screen and (min-width: 1201px) and (max-width: 1800px) {
+  .view {
+    max-height: 420px;
+  }
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 33.3%;
+  }
+
+  .col-md-3 {
+    flex: 0 0 100%;
+    max-width: 33.3%;
+  }
+}
+
+/* ----------- 1800px + ----------- */
+@media screen and (min-width: 1801px) {
+
+  .view {
+    max-height: 420px;
+  }
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 20%;
+
+  }
+  .col-md-3 {
+    flex: 0 0 100%;
+    max-width: 20%;
+  }
+
+}
+
+
+

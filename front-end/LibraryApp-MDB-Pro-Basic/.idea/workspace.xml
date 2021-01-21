@@ -11,6 +11,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -51,6 +52,17 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.Angular CLI Server">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="E2E Tests (ng-uikit-pro-standard)" type="JavaScriptTestRunnerProtractor">
       <config-file value="$PROJECT_DIR$/e2e/protractor.conf.js" />
       <node-interpreter value="project" />
@@ -93,7 +105,7 @@
       <workItem from="1611096914775" duration="881000" />
       <workItem from="1611160109198" duration="2750000" />
       <workItem from="1611169113193" duration="623000" />
-      <workItem from="1611246591410" duration="1207000" />
+      <workItem from="1611246591410" duration="9094000" />
     </task>
     <task id="LOCAL-00001" summary="App">
       <created>1609679050388</created>

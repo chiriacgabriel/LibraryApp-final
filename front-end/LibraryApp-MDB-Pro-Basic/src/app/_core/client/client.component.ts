@@ -20,11 +20,11 @@ export class ClientComponent implements OnInit {
   errorMessage = '';
   isClientAlreadyExists = false;
 
-
   constructor(private clientService: ClientService,
               private alertsService: AlertsService,
               private reloadPageService: ReloadPageService) {
   }
+
 
   ngOnInit(): void {
     this.getClients();

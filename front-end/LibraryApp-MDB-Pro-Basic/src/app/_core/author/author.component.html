@@ -101,7 +101,7 @@
                 <label for="image" class="col-sm-6 col-form-label">Profile Image</label>
                 <select id="image" class="form-control" formControlName="authorImageUrl">
                   <option value="" disabled selected>Select image of author by name</option>
-                  <option *ngFor="let image of authorImageUrl" [ngValue]="image">
+                  <option *ngFor="let image of imageUrlList" [ngValue]="image">
                     {{image.title}}
                   </option>
                 </select>
@@ -202,7 +202,7 @@
                 <label class="col-sm-6 col-form-label" for="imageUrlEdit">Profile Image</label>
                 <select class="form-control" formControlName="authorImageUrl" id="imageUrlEdit">
                   <option disabled hidden selected value="">Select image of author by name</option>
-                  <option *ngFor="let image of authorImageUrl" [ngValue]="image">
+                  <option *ngFor="let image of imageUrlList" [ngValue]="image">
                     {{image.title}}
                   </option>
                 </select>

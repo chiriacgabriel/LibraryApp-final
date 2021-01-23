@@ -1,5 +1,6 @@
 package com.library.repository;
 
+import com.library.model.Book;
 import com.library.model.Reservation;
 import com.library.model.User;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation,
@@ -19,6 +21,8 @@ public interface ReservationRepository extends JpaRepository<Reservation,
     Page<Reservation> findAllByUser(User user, Pageable pageable);
     List<Reservation> findAllByUser(User user);
     Integer countByIdIsNotNull();
+
+    List<Reservation> findAllByBookListContains(Book book);
 
 //    @Modifying
 //    @Query("UPDATE reservation_book r set r.bookName =:bookName where r.id =:id")

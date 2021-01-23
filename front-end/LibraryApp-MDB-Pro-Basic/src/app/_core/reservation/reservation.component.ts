@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ModalDirective} from 'ng-uikit-pro-standard';
+import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MDBModalRef, MDBModalService, ModalDirective} from 'ng-uikit-pro-standard';
 import {Observable, Subject} from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BookService} from '../../_services/book.service';
@@ -14,6 +14,7 @@ import {ReservationService} from '../../_services/reservation.service';
 import {ReloadPageService} from '../../_services/reload-page.service';
 import {AlertsService} from '../../_services/alerts.service';
 import {Reservation} from '../../model/Reservation';
+import {ClientComponent} from '../client/client.component';
 
 @Component({
   selector: 'app-reservation',

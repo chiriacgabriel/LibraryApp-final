@@ -1,12 +1,10 @@
-import {Component, EventEmitter, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BookImageUrlService} from '../../_services/book-image-url.service';
 import {BookCategoryTypeService} from '../../_services/book-category-type.service';
 import {BookService} from '../../_services/book.service';
 import {ModalDirective} from 'ng-uikit-pro-standard';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthorService} from '../../_services/author.service';
-import {BookCategory} from '../../model/BookCategory';
-import {BookImageUrl} from '../../model/BookImageUrl';
 import {AlertsService} from '../../_services/alerts.service';
 import {Book} from 'src/app/model/Book';
 import swal from 'sweetalert';
@@ -165,11 +163,11 @@ export class BookComponent implements OnInit {
 
   addBook(modalDirective: ModalDirective) {
 
-    if (this.addBookForm.value.author == ''){
+    if (this.addBookForm.value.author == '') {
       this.addBookForm.get('author').setValue(null);
     }
 
-    if (this.addBookForm.value.bookCategory == ''){
+    if (this.addBookForm.value.bookCategory == '') {
       this.addBookForm.get('bookCategory').setValue(null);
     }
 
@@ -218,11 +216,9 @@ export class BookComponent implements OnInit {
               this.alertsService.warning();
             },
             error => {
-              console.log(error);
+              this.errorMessage = error.error.message;
+              this.alertsService.error(this.errorMessage);
             });
-          swal('Your registration/file has been deleted!', {
-            icon: 'success',
-          });
         }
       });
   }

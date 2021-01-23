@@ -1,10 +1,13 @@
 package com.library.services;
 
 import com.library.dto.BookDto;
+import com.library.exception.BookHasReservationException;
 import com.library.exception.BookIsNotPresentException;
 import com.library.mapper.BookMapper;
 import com.library.model.Book;
+import com.library.model.Reservation;
 import com.library.repository.BookRepository;
+import com.library.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,8 @@ public class BookService {
     private BookMapper bookMapper;
 
     @Autowired
-    public BookService(BookRepository bookRepository, BookMapper bookMapper) {
+    public BookService(BookRepository bookRepository,
+                       BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
     }
@@ -36,6 +40,7 @@ public class BookService {
         Optional<Book> optionalBook = bookRepository.findById(id);
         return optionalBook.map(book -> bookMapper.map(book));
     }
+
 
     public void deleteById(int id) {
         bookRepository.deleteById(id);

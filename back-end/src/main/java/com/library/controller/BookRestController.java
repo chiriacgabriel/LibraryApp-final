@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import com.library.dto.BookDto;
+import com.library.exception.BookHasReservationException;
 import com.library.exception.BookNoAuthorException;
 import com.library.exception.BookNoCategoryException;
 import com.library.exception.BookNoTypeSelectedException;
@@ -43,7 +44,14 @@ public class BookRestController {
 
     //Delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<BookDto> deleteBookById(@PathVariable int id) {
+    public ResponseEntity<?> deleteBookById(@PathVariable int id) {
+
+        try {
+            bookDtoValidator.validate(id);
+        }catch (BookHasReservationException e){
+            return ResponseEntity.badRequest().body(new MessageResponse("Unable to delete, clients have reserved this book !"));
+        }
+
         bookService.deleteById(id);
         return ResponseEntity.ok()
                 .build();

@@ -19,4 +19,9 @@ export class AlertsService {
     this.toast.warning('Delete was successful', '', options);
   }
 
+  error(text: string) {
+    const options = {timeOut: 1500};
+    this.toast.error(text, '', options);
+  }
+
 }
